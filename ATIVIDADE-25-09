@@ -1,0 +1,77 @@
+enable
+clock set 16:33:00 25 September 2019
+configure terminal
+hostname SW-01
+banner motd "ACESSO APENAS PARA PESSOAS AUTORIZADAS!"
+enable secret CasaTarly123
+ip domain-name grupo5.local
+line console 0
+password CasaTarly123
+login
+exit
+username carlospaulo privilege 15 secret casatarly
+username victorsousa privilege 15 secret casatarly
+username kawanfelix privilege 15 secret casatarly
+username leonardocruz privilege 15 secret casatarly
+username arnolargani privilege 15 secret casatarly
+service password-encryption
+line vty 0 15
+login local
+password SenhadaVTY
+transport input ssh
+exec-timeout 9
+exit
+interface vlan 30
+ip address 192.168.5.206 255.255.255.240
+description GERENCIAMENTO 
+vlan 10
+name VLAN10
+end
+configure terminal
+vlan 20
+name VLAN20
+end
+configure terminal
+vlan 30
+name VLAN30
+end
+configure terminal
+interface vlan 10
+no shutdown
+description VLAN10
+exit
+interface vlan 20
+no shutdown
+description VLAN20
+exit
+interface vlan 30
+no shutdown
+description GERENCIAMENTO
+exit
+interface f 0/1
+switchport mode access
+switchport access vlan 10
+no shutdown
+exit
+interface f 0/2
+switchport mode access
+switchport access vlan 10
+no shutdown
+exit
+interface f 0/3
+switchport mode access
+switchport access vlan 20
+no shutdown
+exit
+interface f 0/4
+switchport mode access
+switchport access vlan 30
+no shutdown
+exit
+interface gigabitEthernet 0/1
+switchport mode trunk
+switchport trunk native vlan 100
+switchport trunk allowed vlan 10,20,30,100
+no shutdown
+exit
+do wr
